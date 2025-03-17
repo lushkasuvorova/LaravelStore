@@ -15,11 +15,16 @@ class Order extends Model
     public static function validate($data)
     {
         return Validator::make($data, [
-            'status' => 'required|in:новый,выполнен',
-            'number' => 'required|string|max:255|unique:orders',
+            'number' => 'required|string|max:255|unique:orders,number',
             'customer_fio' => 'required|string|max:255',
             'customer_komment' => 'nullable|string',
             'product_id' => 'required|exists:products,id',
+            'status' => 'required|in:новый,выполнен',
         ]);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

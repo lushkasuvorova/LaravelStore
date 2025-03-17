@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->enum('status', ['новый', 'выполнен'])->default('новый');
-            $table->string('number')->unique();
+            $table->integer('number')->unsigned();
             $table->string('customer_fio');
             $table->text('customer_komment')->nullable();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // Связь с товаром
