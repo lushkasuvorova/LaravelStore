@@ -15,14 +15,12 @@ class ProductController extends Controller
         $this->productService = $productService;
     }
 
-    // Просмотр списка товаров
     public function index()
     {
         $products = $this->productService->getAllProducts();
         return view('products.index', compact('products'));
     }
 
-    // Создание нового товара
     public function create()
     {
         $categories = $this->productService->getCategories();
@@ -33,12 +31,10 @@ class ProductController extends Controller
     {
         $result = $this->productService->createProduct($request->all());
 
-        // Если валидация не прошла
         if ($result instanceof \Illuminate\Support\MessageBag) {
             return redirect()->back()->withErrors($result)->withInput();
         }
 
-        // Если товар успешно создан
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
 
@@ -47,7 +43,6 @@ class ProductController extends Controller
         return view('products.show', compact('product'));
     }
 
-    // Редактирование товара
     public function edit(Product $product)
     {
         $categories = $this->productService->getCategories();
@@ -58,16 +53,13 @@ class ProductController extends Controller
     {
         $result = $this->productService->updateProduct($product, $request->all());
 
-        // Если валидация не прошла
         if ($result instanceof \Illuminate\Support\MessageBag) {
             return redirect()->back()->withErrors($result)->withInput();
         }
 
-        // Если товар успешно обновлен
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
-    // Удаление товара
     public function destroy(Product $product)
     {
         $this->productService->deleteProduct($product);
