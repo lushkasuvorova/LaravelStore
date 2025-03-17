@@ -21,7 +21,7 @@
                     <td>{{ $order->created_at }} </td>
                     <td>{{ $order->customer_fio }}</td>
                     <td>{{ $order->status }}</td>
-                    <td>{{ $order->product->price*$order->number }}</td>
+                    <td>{{ number_format($order->product->price*$order->number / 100, 2) }} ₽</td>
                     <td>
                         <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-warning">Edit</a>
                         <form action="{{ route('orders.destroy', $order->id) }}" method="POST" style="display:inline;">
