@@ -21,4 +21,9 @@ class Product extends Model
             'category_id' => 'required|exists:categories,id',
         ]);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
