@@ -29,13 +29,14 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        $result = $this->orderService->createOrder($request->all());
-
-        if ($result instanceof \Illuminate\Support\MessageBag) {
+        try {
+            $result = $this->orderService->createOrder($request->all());
+            return redirect()->route('orders.index')->with('success', 'Order created successfully');
+        } catch (ValidationException $e) {
             return redirect()->back()->withErrors($result)->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ошибка при сохранении заказа.');
         }
-
-        return redirect()->route('orders.index')->with('success', 'Order created successfully');
     }
 
     public function show(Order $order)
@@ -51,13 +52,14 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        $result = $this->orderService->updateOrder($order, $request->all());
-
-        if ($result instanceof \Illuminate\Support\MessageBag) {
+        try {
+            $result = $this->orderService->updateOrder($order, $request->all());
+            return redirect()->route('orders.index')->with('success', 'Статус заказа изменен на "выполнен"');
+        } catch (ValidationException $e) {
             return redirect()->back()->withErrors($result)->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ошибка при сохранении заказа.');
         }
-
-        return redirect()->route('orders.index')->with('success', 'Статус заказа изменен на "выполнен"');
     }
 
     public function destroy(Order $order)

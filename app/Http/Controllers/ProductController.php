@@ -29,13 +29,14 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $result = $this->productService->createProduct($request->all());
-
-        if ($result instanceof \Illuminate\Support\MessageBag) {
+        try {
+            $result = $this->productService->createProduct($request->all());
+            return redirect()->route('products.index')->with('success', 'Product created successfully');
+        } catch (ValidationException $e) {
             return redirect()->back()->withErrors($result)->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ошибка при добавлении товара.');
         }
-
-        return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
 
     public function show(Product $product)
@@ -51,13 +52,14 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $result = $this->productService->updateProduct($product, $request->all());
-
-        if ($result instanceof \Illuminate\Support\MessageBag) {
+        try {
+            $result = $this->productService->updateProduct($product, $request->all());
+            return redirect()->route('products.index')->with('success', 'Product updated successfully');
+        } catch (ValidationException $e) {
             return redirect()->back()->withErrors($result)->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ошибка при редактировании товара.');
         }
-
-        return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
     public function destroy(Product $product)

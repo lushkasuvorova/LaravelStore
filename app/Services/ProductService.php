@@ -3,7 +3,6 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Support\Facades\Validator;
 
 class ProductService
 {
@@ -19,24 +18,19 @@ class ProductService
 
     public function createProduct($data)
     {
-        $validator = Product::validate($data);
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-
-        return Product::create($data);
+        $data['price'] = round($data['price'] * 100);
+        $product = new Product($data);
+        $product->validate();
+        $product->create($data);
+        return $product;
     }
 
     public function updateProduct($product, $data)
     {
-        $validator = Product::validate($data);
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-
-        $product->update($data);
+        $data['price'] = round($data['price'] * 100);
+        $product->fill($data);
+        $product->validate();
+        $product->update();
         return $product;
     }
 

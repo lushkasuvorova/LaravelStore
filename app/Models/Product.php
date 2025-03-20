@@ -12,14 +12,18 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'price', 'category_id'];
 
-    public static function validate($data)
+    public function validate()
     {
-        return Validator::make($data, [
+        return Validator::make($this->attributesToArray(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0.01',
             'category_id' => 'required|exists:categories,id',
         ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
     }
 
     public function category()

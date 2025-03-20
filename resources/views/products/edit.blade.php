@@ -14,7 +14,7 @@
 
         <div class="form-group">
             <label for="price">Цена</label>
-            <input type="number" name="price" id="price" class="form-control" value="{{ old('price', $product->price) }}" required>
+            <input type="number"  step="0.01" name="price" id="price" class="form-control" value="{{ old('price', number_format($product->price / 100, 2, '.', '')) }}" required>
         </div>
 
         <div class="form-group">

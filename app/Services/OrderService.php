@@ -19,13 +19,10 @@ class OrderService
 
     public function createOrder($data)
     {
-        $validator = Order::validate($data);
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-
-        return Order::create($data);
+        $order = new Order($data);
+        $order->validate();
+        
+        return $order->create($data);
     }
 
     public function updateOrder($order, $data)
